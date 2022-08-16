@@ -76,6 +76,7 @@ let specifiedBarCount;
 
 let queue;
 let currentArray;
+let previousArray = [];
 let slowTimer;
 
 function setup() {
@@ -96,7 +97,7 @@ function setup() {
   barCountInput.style('border', '2px solid #536f82');
   barCountInput.style('border-radius', '5px');
   barCountInput.style('padding', '2px 0px 2px 2px');
-  barCountInput.position(50, 50);
+  barCountInput.position(40, 50);
   barCountInput.size(75);
   barCountInput.changed(() => {
     specifiedBarCount = parseInt(barCountInput.value());
@@ -109,12 +110,31 @@ function setup() {
   newButton.style('border', '1px solid transparent');
   newButton.style('border-radius', '5px');
   newButton.style('padding', '3px 10px');
-  newButton.position(150, 50);
+  newButton.position(135, 50);
   newButton.size(50);
   newButton.mouseClicked(() => {
     queue = [];
     randomArray = createRandomArrayRanged(1, specifiedBarCount);
+    previousArray = [...randomArray];
     currentArray = randomArray;
+  });
+
+  let resetButton = createButton('Reset');
+  resetButton.style('background-color', '#536f82');
+  resetButton.style('color', 'white');
+  resetButton.style('outline', '0 none');
+  resetButton.style('border', '1px solid transparent');
+  resetButton.style('border-radius', '5px');
+  resetButton.style('padding', '3px 6px');
+  resetButton.position(200, 50);
+  resetButton.size(50);
+  resetButton.mouseClicked(() => {
+    queue = [];
+    if (previousArray.length == 0) {
+    	currentArray = createRandomArrayRanged(1, specifiedBarCount);
+    } else {
+    	currentArray = previousArray;
+    }
   });
 
   let sortTypeMenu = createSelect();
@@ -124,8 +144,8 @@ function setup() {
   sortTypeMenu.style('border', '0px solid black');
   sortTypeMenu.style('border-radius', '5px');
   sortTypeMenu.style('padding', '3px 10px 3px 3px');
-  sortTypeMenu.position(220, 50);
-  sortTypeMenu.size(125);
+  sortTypeMenu.position(265, 50);
+  sortTypeMenu.size(120);
   sortTypeMenu.option('Quicksort', 'quick');
   sortTypeMenu.option('Mergesort', 'merge');
   sortTypeMenu.option('Bubble sort', 'bubble');
@@ -142,7 +162,7 @@ function setup() {
   sortButton.style('border', '1px solid transparent');
   sortButton.style('border-radius', '5px');
   sortButton.style('padding', '3px 10px');
-  sortButton.position(360, 50);
+  sortButton.position(400, 50);
   sortButton.size(50);
   sortButton.mouseClicked(() => {
     if (selectedSortType == 'quick') {
@@ -174,7 +194,7 @@ function setup() {
   speedSlider.style('appearance', 'none');
   speedSlider.style('background-color', '#536f82');
   speedSlider.style('height', '7px');
-  speedSlider.position(460, 55);
+  speedSlider.position(470, 55);
   speedSlider.changed(() => {
     specifiedSpeed = speedSlider.value();
   });
@@ -207,9 +227,9 @@ function draw() {
     drawTextFromCorner('Sorting...', 270, 50, 'black');
   }
   if (specifiedSpeed == 100) {
-    drawTextFromCorner('Speed: Instant', 440, 50, 'black');
+    drawTextFromCorner('Speed: Instant', 450, 50, 'black');
   } else {
-    drawTextFromCorner('Speed: ' + specifiedSpeed, 440, 50, 'black');
+    drawTextFromCorner('Speed: ' + specifiedSpeed, 450, 50, 'black');
   }
   drawBars(currentArray, 0, 150, 625, 422, '#536f82');
 }
@@ -225,6 +245,7 @@ function drawBars(array, x, y, width, height, color) {
     fill(color);
     let widthSegment = (width / (array.length));
     let barSpacing = widthSegment * 0.2;
+
     let widthOfBar = widthSegment - barSpacing;
     let heightOfBar = (height /*- textHeight*/) * array[i] / max(array);
     rect(i * (barSpacing + widthOfBar), y + (height /*- textHeight*/ - heightOfBar), widthOfBar, heightOfBar);
