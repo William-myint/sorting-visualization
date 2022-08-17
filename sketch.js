@@ -59,12 +59,20 @@ const myChart = new Chart(ctx, {
         type: 'linear',
         position: 'bottom',
         beginAtZero: true,
-        grace: "10%"
+        grace: "10%",
+        title: {
+          display: true,
+          text: "Input Size"
+        }
       },
       y: {
         type: 'linear',
         beginAtZero: true,
-        grace: "10%"
+        grace: "10%",
+        title: {
+          display: true,
+          text: "No. of Operations"
+        }
       }
     }
   },
@@ -130,11 +138,7 @@ function setup() {
   resetButton.size(50);
   resetButton.mouseClicked(() => {
     queue = [];
-    if (previousArray.length == 0) {
-    	currentArray = createRandomArrayRanged(1, specifiedBarCount);
-    } else {
-    	currentArray = previousArray;
-    }
+    currentArray = [...previousArray];
   });
 
   let sortTypeMenu = createSelect();
